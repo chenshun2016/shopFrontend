@@ -1,22 +1,14 @@
-import { userApi } from "./api/user";
+// src/App.tsx
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { AppRouter } from './router';
 
-const App = () => {
-  const btnClick = () => {
-    userApi.createUser({
-      username: 'cess',
-      email: 'hdjsgjhf@qq.com',
-      password: '131234'
-    }).then(res=>{
-      console.log('创建用户成功', res)
-    })
-  };
-
-  // return 后面写 JSX
+function App() {
   return (
-    <div className="App">
-      <button onClick={btnClick}>按钮</button>
-    </div>
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
   );
-};
+}
 
 export default App;
