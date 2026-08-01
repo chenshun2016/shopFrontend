@@ -40,6 +40,7 @@ export interface User {
   id: number | string;
   username: string;
   email: string;
+  password: string,
   firstName?: string;
   lastName?: string;
   fullName?: string;

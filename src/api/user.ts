@@ -16,8 +16,8 @@ export const userApi = {
   },
 
   // 创建用户
-  createUser: async (userData: Omit<User, 'id' | 'createdAt'>): Promise<User> => {
-    const response = await axiosInstance.post<ApiResponse<User>>('/users', userData);
+  createUser: async (userData: Pick<User, 'username' | 'email' | 'password'>): Promise<User> => {
+    const response = await axiosInstance.post<ApiResponse<User>>('/api/auth/register', userData);
     return response.data.data;
   },
 }
