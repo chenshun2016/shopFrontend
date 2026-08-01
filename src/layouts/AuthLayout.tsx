@@ -1,7 +1,7 @@
-function MainLayout(){
+function AuthLayout(){
   return (
     <div>权限</div>
   )
 }
 
-export default MainLayout;
+export default AuthLayout;

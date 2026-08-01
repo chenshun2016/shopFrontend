@@ -1,6 +1,6 @@
 // src/router/index.tsx
 import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route, useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 import { routes } from './routes';
 import LoadingSpinner from '../components/LoadingSpinner';
 
