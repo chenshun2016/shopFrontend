@@ -1,6 +1,11 @@
+import { Outlet } from 'react-router-dom';
+
 function MainLayout(){
   return (
-    <div>123</div>
+    <div>
+      123
+      <Outlet />
+    </div>
   )
 }
 
