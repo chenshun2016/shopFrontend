@@ -1,0 +1,5 @@
+{
+  // 让编辑器的 TypeScript server 使用项目内的 typescript（5.x），
+  // 避免误用全局 typescript 6+（拒绝 es5/node 等已废弃选项导致模块解析失效）
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
