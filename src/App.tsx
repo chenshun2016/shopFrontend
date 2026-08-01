@@ -1,4 +1,4 @@
-import { userApi } from "./api/user.js";
+import { userApi } from "./api/user";
 
 const App = () => {
   const btnClick = () => {
