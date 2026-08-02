@@ -22,7 +22,7 @@ export const routes: RouteObject[] = [
     element: <MainLayout />,
     children: [
       { index: true, element: <Home /> },
-      { path: 'goodDetail', element: <GoodDetail />},
+      { path: 'goodDetail/:id', element: <GoodDetail />},
       // 模块路由
       ...userRoutes,
     ],

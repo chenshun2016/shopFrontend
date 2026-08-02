@@ -153,7 +153,7 @@ export interface Product {
   description: string;
   price: number;
   category: string;
-  images: string[];
+  images?: string[];
   stock: number;
   rating: number;
   reviews: number;
