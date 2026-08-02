@@ -2,27 +2,28 @@
 import type { FormProps } from 'antd';
 import { Button, Input, Form, message } from 'antd';
 import '@/css/auth/register.scss';
+import { useNavigate } from 'react-router-dom';
 import { userApi } from '@/api/user';
 
-type FieldType = {
-  username: string;
-  password: string;
-  email: string;
-};
-
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-  console.log('Success:', values);
-  userApi.createUser(values).then(res=>{
-    console.log(values, '111')
-    message.success("注册成功");
-  })
-};
-
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
-
 const Register = () => {
+  type FieldType = {
+    username: string;
+    password: string;
+    email: string;
+  };
+  const navigate = useNavigate();
+  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    console.log('Success:', values);
+    userApi.createUser(values).then(res=>{
+      console.log(values, '111')
+      message.success("注册成功");
+      navigate("/")
+    })
+  };
+  
+  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
   return (
     <div className='page-wrap'>
       <Form
