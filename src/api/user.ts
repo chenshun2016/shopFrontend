@@ -1,5 +1,5 @@
 import axiosInstance from './service';
-import { User, ApiResponse } from './types/api.types';
+import { User, ApiResponse, LoginResponse } from './types/api.types';
 
 // 用户相关 API
 export const userApi = {
@@ -22,8 +22,8 @@ export const userApi = {
   },
 
   // 登录接口
-  login: async(userData: Pick<User, 'username' | 'password'>): Promise<User> => {
-    const response = await axiosInstance.post<ApiResponse<User>>('/api/auth/login', userData);
+  login: async(userData: Pick<User, 'username' | 'password'>): Promise<LoginResponse> => {
+    const response = await axiosInstance.post<ApiResponse<LoginResponse>>('/api/auth/login', userData);
     return response.data.data;
   }
 }

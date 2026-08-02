@@ -4,7 +4,7 @@ import { Button, Input, Form, message } from 'antd';
 import '@/css/auth/register.scss';
 import { useNavigate } from 'react-router-dom';
 import { userApi } from '@/api/user';
-import { storage } from '@/utils/storage';
+import { tokenStorage } from '@/utils/storage';
 const Login = () => {
   type FieldType = {
     username: string;
@@ -16,7 +16,8 @@ const Login = () => {
     userApi.login(values).then(res=>{
       console.log(values, '111')
       message.success("登录成功");
-      storage.set('accessToken', res.accessToken)
+      tokenStorage.setAccessToken(res.accessToken);
+      tokenStorage.setRefreshToken(res.refreshToken);
       navigate("/")
     })
   };
