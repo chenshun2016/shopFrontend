@@ -1,4 +1,6 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+import { tokenStorage } from '@/utils/storage';
+
 const baseURL = "http://localhost:3000";
 
 const axiosInstance: AxiosInstance = axios.create({
@@ -13,7 +15,7 @@ const axiosInstance: AxiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // 从 localStorage 获取 token
-    const token = localStorage.getItem('accessToken');
+    const token = tokenStorage.getAccessToken();
     
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -46,7 +48,7 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
       
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = tokenStorage.getRefreshToken();
         if (refreshToken) {
           // 调用刷新 token 接口
           const response = await axios.post(`${baseURL}/auth/refresh`, {
@@ -54,7 +56,7 @@ axiosInstance.interceptors.response.use(
           });
           
           const { accessToken } = response.data;
-          localStorage.setItem('accessToken', accessToken);
+          tokenStorage.setAccessToken(accessToken);
           
           // 重新发送原始请求
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -62,8 +64,7 @@ axiosInstance.interceptors.response.use(
         }
       } catch (refreshError) {
         // 刷新失败，跳转到登录页
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        tokenStorage.clear();
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }

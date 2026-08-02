@@ -37,6 +37,8 @@ export interface PaginationResponse<T> {
 
 // ============ 用户相关类型 ============
 export interface User {
+  // ============ 用户相关类型 ============
+  accessToken(arg0: string, accessToken: any): unknown;
   id: number | string;
   username: string;
   email: string;
