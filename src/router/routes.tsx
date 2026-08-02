@@ -9,6 +9,7 @@ import { userRoutes } from './modules/user.routes';
 
 // 公开页面
 const Home = lazy(() => import('../pages/Home'));
+const GoodDetail = lazy(() => import('../pages/goods/goodDetail'));
 const Login = lazy(() => import('../pages/auth/Login'));
 const Register = lazy(() => import('../pages/auth/Register'));
 const NotFound = lazy(() => import('../pages/NotFound'));
@@ -21,6 +22,7 @@ export const routes: RouteObject[] = [
     element: <MainLayout />,
     children: [
       { index: true, element: <Home /> },
+      { path: 'goodDetail', element: <GoodDetail />},
       // 模块路由
       ...userRoutes,
     ],

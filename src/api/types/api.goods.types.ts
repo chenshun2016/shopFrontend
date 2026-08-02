@@ -10,3 +10,8 @@ export interface GetGoodsApi{
   page: number,
   limit: number,
 }
+
+export interface GoodsDetail{
+  id: number,
+  price: number
+}
