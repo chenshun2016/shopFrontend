@@ -1,8 +1,8 @@
 // import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import type { FormProps } from 'antd';
 import { Button, Input, Form, message } from 'antd';
-import '../../css/auth/register.scss';
-import { userApi } from '../../api/user';
+import '@/css/auth/register.scss';
+import { userApi } from '@/api/user';
 
 type FieldType = {
   username: string;
