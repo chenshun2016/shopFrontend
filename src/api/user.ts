@@ -20,4 +20,10 @@ export const userApi = {
     const response = await axiosInstance.post<ApiResponse<User>>('/api/auth/register', userData);
     return response.data.data;
   },
+
+  // 登录接口
+  login: async(userData: Pick<User, 'username' | 'password'>): Promise<User> => {
+    const response = await axiosInstance.post<ApiResponse<User>>('/api/auth/login', userData);
+    return response.data.data;
+  }
 }
