@@ -1,6 +1,9 @@
 // src/pages/Home.tsx
+// import {} from '@/api'
 const Home = () => {
-  return <div>首页</div>;
+  return <div>
+
+  </div>;
 };
 
 export default Home;
