@@ -1,19 +1,20 @@
 // import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import type { FormProps } from 'antd';
-import { Button, Input, Form } from 'antd';
+import { Button, Input, Form, message } from 'antd';
 import '../../css/auth/register.scss';
 import { userApi } from '../../api/user';
 
 type FieldType = {
-  username?: string;
-  password?: string;
-  email?: string;
+  username: string;
+  password: string;
+  email: string;
 };
 
 const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
   console.log('Success:', values);
   userApi.createUser(values).then(res=>{
     console.log(values, '111')
+    message.success("注册成功");
   })
 };
 
