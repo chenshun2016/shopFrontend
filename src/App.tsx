@@ -2,12 +2,15 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AppRouter } from './router';
+import { FavoritesProvider } from './store/FavoritesProvider';
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppRouter />
-    </BrowserRouter>
+    <FavoritesProvider>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </FavoritesProvider>
   );
 }
 

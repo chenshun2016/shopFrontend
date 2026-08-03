@@ -26,6 +26,7 @@ const menuItems: MenuProps['items'] = [
 const menuRouteMap: Record<string, string> = {
   home: '/',
   cart: '/cart',
+  favorites: '/favorites',
 };
 
 function MainLayout() {

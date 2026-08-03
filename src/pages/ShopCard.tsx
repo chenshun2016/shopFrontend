@@ -4,6 +4,7 @@ import { Button, Card, Checkbox, Col, Empty, InputNumber, Row, Typography, messa
 import { DeleteOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons';
 import type { CheckboxChangeEvent } from 'antd';
 import type { Product } from '@/api/types/api.types';
+import { useFavorites } from '@/store/favorites';
 import '@/css/shopCard.scss';
 
 const { Text } = Typography;
@@ -38,8 +39,7 @@ const mockCart: CartItem[] = [
 const ShopCard = () => {
   const [cartList, setCartList] = useState<CartItem[]>(mockCart);
   const [selectedIds, setSelectedIds] = useState<Set<string | number>>(new Set());
-  // 本地收藏状态（持久化需接后端）
-  const [favorites, setFavorites] = useState<Set<string | number>>(new Set());
+  const { favorites, toggleFavorite, addFavorites } = useFavorites();
 
   const allSelected = cartList.length > 0 && selectedIds.size === cartList.length;
   const indeterminate = selectedIds.size > 0 && !allSelected;
@@ -66,8 +66,7 @@ const ShopCard = () => {
       message.warning('请先选择商品');
       return;
     }
-    setFavorites((prev) => new Set([...prev, ...selectedIds]));
-    message.success(`已收藏 ${selectedIds.size} 件商品`);
+    addFavorites(cartList.filter((item) => selectedIds.has(item.id)));
   };
 
   // 移出购物车（批量）
@@ -90,21 +89,6 @@ const ShopCard = () => {
       return next;
     });
     message.info(`已移除「${item.name}」`);
-  };
-
-  // 单个商品收藏 / 取消收藏
-  const toggleFavoriteOne = (item: CartItem) => {
-    setFavorites((prev) => {
-      const next = new Set(prev);
-      if (next.has(item.id)) {
-        next.delete(item.id);
-        message.info(`已取消收藏「${item.name}」`);
-      } else {
-        next.add(item.id);
-        message.success(`已收藏「${item.name}」`);
-      }
-      return next;
-    });
   };
 
   // 修改数量：减到 0 时移除该商品
@@ -190,10 +174,10 @@ const ShopCard = () => {
                 />
                 {/* 收藏 / 删除 */}
                 <div className="shopcard-item-actions">
-                  {favorites.has(item.id) ? (
-                    <HeartFilled className="shopcard-item-fav shopcard-item-fav-active" onClick={() => toggleFavoriteOne(item)} />
+                  {favorites.some((f) => f.id === item.id) ? (
+                    <HeartFilled className="shopcard-item-fav shopcard-item-fav-active" onClick={() => toggleFavorite(item)} />
                   ) : (
-                    <HeartOutlined className="shopcard-item-fav" onClick={() => toggleFavoriteOne(item)} />
+                    <HeartOutlined className="shopcard-item-fav" onClick={() => toggleFavorite(item)} />
                   )}
                   <DeleteOutlined className="shopcard-item-del" onClick={() => removeOne(item)} />
                 </div>

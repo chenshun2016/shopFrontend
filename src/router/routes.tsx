@@ -11,6 +11,7 @@ import { userRoutes } from './modules/user.routes';
 const Home = lazy(() => import('../pages/Home'));
 const GoodDetail = lazy(() => import('../pages/goods/goodDetail'));
 const ShopCard = lazy(() => import('../pages/ShopCard'));
+const MyCollect = lazy(() => import('../pages/MyCollect'));
 const Login = lazy(() => import('../pages/auth/Login'));
 const Register = lazy(() => import('../pages/auth/Register'));
 const NotFound = lazy(() => import('../pages/NotFound'));
@@ -25,6 +26,7 @@ export const routes: RouteObject[] = [
       { index: true, element: <Home /> },
       { path: 'goodDetail/:id', element: <GoodDetail />},
       { path: 'cart', element: <ShopCard />},
+      { path: 'favorites', element: <MyCollect />},
       // 模块路由
       ...userRoutes,
     ],
