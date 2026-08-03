@@ -9,6 +9,7 @@ export interface GoodsResData<T> {
 export interface GetGoodsApi{
   page: number,
   limit: number,
+  keyword?: string,
 }
 
 export interface GoodsDetail{
