@@ -154,6 +154,7 @@ export interface Product {
   price: number;
   category: string;
   images?: string[];
+  imageUrl: string | undefined;
   stock: number;
   rating: number;
   reviews: number;

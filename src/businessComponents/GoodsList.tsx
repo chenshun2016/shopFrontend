@@ -47,8 +47,8 @@ const GoodsList = ({ list }: GoodsListProps) => {
           <Card
             hoverable
             cover={
-              item.images?.[0] ? (
-                <img src={item.images[0]} alt={item.name} className="goods-cover" />
+              item.imageUrl ? (
+                <img src={item.imageUrl} alt={item.name} className="goods-cover" />
               ) : (
                 <div className="goods-cover goods-cover-placeholder">暂无图片</div>
               )
