@@ -1,15 +1,20 @@
 // src/pages/ShopCard.tsx
 import { useMemo, useState } from 'react';
-import { Button, Card, Checkbox, Col, Empty, Row, Typography, message } from 'antd';
-import { DeleteOutlined, HeartOutlined } from '@ant-design/icons';
+import { Button, Card, Checkbox, Col, Empty, InputNumber, Row, Typography, message } from 'antd';
+import { DeleteOutlined, HeartFilled, HeartOutlined } from '@ant-design/icons';
 import type { CheckboxChangeEvent } from 'antd';
 import type { Product } from '@/api/types/api.types';
 import '@/css/shopCard.scss';
 
 const { Text } = Typography;
 
+// 购物车商品（商品信息 + 数量）
+interface CartItem extends Product {
+  quantity: number;
+}
+
 // 构造购物车数据（TODO: 接入后端购物车接口后移除）
-const makeProduct = (p: Partial<Product> & Pick<Product, 'id' | 'name' | 'price'>): Product => ({
+const makeItem = (p: Partial<CartItem> & Pick<CartItem, 'id' | 'name' | 'price'>): CartItem => ({
   description: '',
   category: '数码',
   imageUrl: undefined,
@@ -19,19 +24,22 @@ const makeProduct = (p: Partial<Product> & Pick<Product, 'id' | 'name' | 'price'
   isActive: true,
   createdAt: '',
   updatedAt: '',
+  quantity: 1,
   ...p,
 });
 
-const mockCart: Product[] = [
-  makeProduct({ id: 1, name: '无线蓝牙耳机', price: 299, imageUrl: 'https://picsum.photos/seed/g1/200' }),
-  makeProduct({ id: 2, name: '机械键盘', price: 459, imageUrl: 'https://picsum.photos/seed/g2/200' }),
-  makeProduct({ id: 3, name: '电竞鼠标', price: 199, imageUrl: 'https://picsum.photos/seed/g3/200' }),
-  makeProduct({ id: 4, name: '显示器支架', price: 129, imageUrl: undefined }),
+const mockCart: CartItem[] = [
+  makeItem({ id: 1, name: '无线蓝牙耳机', price: 299, quantity: 2, imageUrl: 'https://picsum.photos/seed/g1/200' }),
+  makeItem({ id: 2, name: '机械键盘', price: 459, quantity: 1, imageUrl: 'https://picsum.photos/seed/g2/200' }),
+  makeItem({ id: 3, name: '电竞鼠标', price: 199, quantity: 1, imageUrl: 'https://picsum.photos/seed/g3/200' }),
+  makeItem({ id: 4, name: '显示器支架', price: 129, quantity: 3, imageUrl: undefined }),
 ];
 
 const ShopCard = () => {
-  const [cartList, setCartList] = useState<Product[]>(mockCart);
+  const [cartList, setCartList] = useState<CartItem[]>(mockCart);
   const [selectedIds, setSelectedIds] = useState<Set<string | number>>(new Set());
+  // 本地收藏状态（持久化需接后端）
+  const [favorites, setFavorites] = useState<Set<string | number>>(new Set());
 
   const allSelected = cartList.length > 0 && selectedIds.size === cartList.length;
   const indeterminate = selectedIds.size > 0 && !allSelected;
@@ -58,10 +66,11 @@ const ShopCard = () => {
       message.warning('请先选择商品');
       return;
     }
+    setFavorites((prev) => new Set([...prev, ...selectedIds]));
     message.success(`已收藏 ${selectedIds.size} 件商品`);
   };
 
-  // 移出购物车
+  // 移出购物车（批量）
   const removeSelected = () => {
     if (selectedIds.size === 0) {
       message.warning('请先选择商品');
@@ -72,11 +81,50 @@ const ShopCard = () => {
     message.success('已移出购物车');
   };
 
+  // 单个商品移出
+  const removeOne = (item: CartItem) => {
+    setCartList((prev) => prev.filter((i) => i.id !== item.id));
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(item.id);
+      return next;
+    });
+    message.info(`已移除「${item.name}」`);
+  };
+
+  // 单个商品收藏 / 取消收藏
+  const toggleFavoriteOne = (item: CartItem) => {
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(item.id)) {
+        next.delete(item.id);
+        message.info(`已取消收藏「${item.name}」`);
+      } else {
+        next.add(item.id);
+        message.success(`已收藏「${item.name}」`);
+      }
+      return next;
+    });
+  };
+
+  // 修改数量：减到 0 时移除该商品
+  const updateQuantity = (item: CartItem, value: number | null) => {
+    if (value === null || value === item.quantity) return;
+    if (value <= 0) {
+      removeOne(item);
+      return;
+    }
+    setCartList((prev) => prev.map((i) => (i.id === item.id ? { ...i, quantity: value } : i)));
+  };
+
   const selectedItems = useMemo(
     () => cartList.filter((item) => selectedIds.has(item.id)),
     [cartList, selectedIds]
   );
-  const totalPrice = useMemo(() => selectedItems.reduce((sum, item) => sum + item.price, 0), [selectedItems]);
+  const totalPrice = useMemo(
+    () => selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    [selectedItems]
+  );
 
   const goCheckout = () => {
     if (selectedItems.length === 0) {
@@ -131,6 +179,24 @@ const ShopCard = () => {
                     ¥{item.price}
                   </Text>
                 </div>
+                {/* 数量加减：减到 0 自动移除 */}
+                <InputNumber
+                  className="shopcard-item-qty"
+                  size="small"
+                  min={0}
+                  max={999}
+                  value={item.quantity}
+                  onChange={(value) => updateQuantity(item, value)}
+                />
+                {/* 收藏 / 删除 */}
+                <div className="shopcard-item-actions">
+                  {favorites.has(item.id) ? (
+                    <HeartFilled className="shopcard-item-fav shopcard-item-fav-active" onClick={() => toggleFavoriteOne(item)} />
+                  ) : (
+                    <HeartOutlined className="shopcard-item-fav" onClick={() => toggleFavoriteOne(item)} />
+                  )}
+                  <DeleteOutlined className="shopcard-item-del" onClick={() => removeOne(item)} />
+                </div>
               </div>
             ))}
           </Card>
@@ -147,6 +213,7 @@ const ShopCard = () => {
                   ) : (
                     <div className="shopcard-selected-placeholder">暂无图</div>
                   )}
+                  <span className="shopcard-selected-qty">×{item.quantity}</span>
                 </div>
               ))}
               {selectedItems.length === 0 && (
