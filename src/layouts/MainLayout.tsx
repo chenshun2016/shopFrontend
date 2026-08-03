@@ -25,6 +25,7 @@ const menuItems: MenuProps['items'] = [
 // 各菜单项对应的路由（页面就绪后逐一补充）
 const menuRouteMap: Record<string, string> = {
   home: '/',
+  cart: '/cart',
 };
 
 function MainLayout() {
