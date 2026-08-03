@@ -1,0 +1,29 @@
+// src/css/layout.scss
+.main-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-layout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.main-layout-logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.main-layout-menu {
+  border-bottom: none;
+}
+
+.main-layout-content {
+  flex: 1;
+}
