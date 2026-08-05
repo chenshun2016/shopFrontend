@@ -11,6 +11,7 @@ const { Text } = Typography;
 
 interface GoodsListProps {
   list: Product[];
+  favoriteProdAdd?: (id: number) => void;
 }
 
 const GoodsList = ({ list }: GoodsListProps) => {

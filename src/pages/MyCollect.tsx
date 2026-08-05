@@ -3,6 +3,7 @@
 import { Button, Popconfirm, Typography, message } from 'antd';
 import GoodsList from '@/businessComponents/GoodsList';
 import { useFavorites } from '@/store/favorites';
+import { favoriteApi } from '@/api/favarite';
 import '@/css/mycollect.scss';
 
 const { Title } = Typography;
@@ -14,6 +15,12 @@ const MyCollect = () => {
     clearFavorites();
     message.success('已清空收藏');
   };
+
+  const favoriteProdAdd = (id: number) => {
+    favoriteApi.add(id).then(() => {
+      console.log('添加成功');
+    })
+  }
 
   return (
     <div className="mycollect-page">
@@ -30,7 +37,7 @@ const MyCollect = () => {
         )}
       </div>
       {/* 复用商品列表组件：展示、点击进详情、取消收藏都在里面 */}
-      <GoodsList list={favorites} />
+      <GoodsList list={favorites} favoriteProdAdd = { favoriteProdAdd } />
     </div>
   );
 };
